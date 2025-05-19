@@ -1,0 +1,19 @@
+
+    <h2>Расписание поездов</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Дата</th>
+          <th>Время</th>
+          <th>Поезд</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of schedule">
+          <td>{{ item.date | date:'dd.MM.yyyy' }}</td>
+          <td>{{ item.time }}</td>
+          <td>{{ item.train }}</td>
+        </tr>
+      </tbody>
+    </table>
+    
