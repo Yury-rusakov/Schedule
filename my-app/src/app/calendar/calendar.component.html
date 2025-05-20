@@ -1,0 +1,34 @@
+<table class='calendar-table' *ngIf="calendar">
+    <thead>
+        <tr>
+            <th>Monday</th>
+            <th>Tuesday</th>
+            <th>Wednesday</th>
+            <th>Thursday</th>
+            <th>Friday</th>
+            <th>Saturday</th>
+            <th>Sunday</th>
+        </tr>
+    </thead>
+    <tbody>
+        @for (row of calendar | chunk: 7; track $index) {
+            <tr>
+                @for (c of row; track $index) {
+                    <td class="calendar-day" [ngClass]="{'past-date': !c?.date, 'today': c?.isToday}">
+                        <div class="calendar-day-header" [ngClass]="{'blue-date': c?.isToday}">
+                            @if (c?.date) {
+                                <strong>{{ c.date.getDate() }}</strong>
+                            }
+                            @if (c?.date && c.isToday) {
+                                <strong>First Day</strong>
+                            }
+                        </div>
+                    </td>
+                }
+            </tr>
+        }
+    </tbody>
+</table>
+  
+  
+  
