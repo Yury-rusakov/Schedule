@@ -1,0 +1,17 @@
+    <h2>Add Task</h2>
+    <div>
+        <label>Title:</label>
+        <input type="text" [(ngModel)]="title">
+    </div>
+    <div>
+        <label>Due Date:</label>
+        <input type="date" [(ngModel)]="dueDate">
+    </div>
+    <div>
+        <label>Assign User:</label>
+        <select [(ngModel)]="assignedUser">
+            <option value="">-- Select User --</option>
+            <option *ngFor="let user of users" [value]="user.id">{{ user.name }}</option>
+        </select>
+    </div>
+    <button (click)="addTask()">Add Task</button>
