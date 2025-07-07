@@ -1,0 +1,7 @@
+{
+  "main": "index.html",
+  "nooo_type": "module", 
+  "dependencies": {
+    "express": "^5.1.0"
+  }
+}
