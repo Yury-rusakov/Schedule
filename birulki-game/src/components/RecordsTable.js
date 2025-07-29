@@ -1,9 +1,12 @@
 import { useEffect, useState } from 'react';
+import { useGame } from '../contexts/GameContext';
+import { useNavigate } from 'react-router-dom';
 
 const RecordsTable = () => {
   const [records, setRecords] = useState([]);
+  const { gameState, resetGameState } = useGame();
+  const navigate = useNavigate();
 
-  // Загрузка рекордов при монтировании компонента
   useEffect(() => {
     const saved = localStorage.getItem('birulki-records');
     if (saved) {
@@ -18,9 +21,14 @@ const RecordsTable = () => {
     }
   };
 
+  const continueGame = () => {
+    navigate('/game');
+  };
+
   return (
     <div className="records-table">
       <h2>Таблица рекордов</h2>
+      
       {records.length === 0 ? (
         <p>Рекордов пока нет</p>
       ) : (
@@ -45,7 +53,12 @@ const RecordsTable = () => {
               ))}
             </tbody>
           </table>
-          <button onClick={clearRecords}>Очистить рекорды</button>
+          <div className="records-controls">
+            <button onClick={clearRecords}>Очистить рекорды</button>
+            {gameState.isGameStarted && (
+              <button onClick={continueGame}>Продолжить игру</button>
+            )}
+          </div>
         </>
       )}
     </div>

@@ -1,26 +1,13 @@
-import { useState, useEffect, useRef } from 'react';
+import { useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useGame } from '../contexts/GameContext';
 
 const Game = () => {
-  const [score, setScore] = useState(0);
-  const [gameStarted, setGameStarted] = useState(false);
-  const [playerName, setPlayerName] = useState('');
-  const [sticks, setSticks] = useState([]);
+  const { gameState, setGameState } = useGame();
+  const { score, playerName, sticks, isGameStarted } = gameState;
   const gameBoardRef = useRef(null);
   const navigate = useNavigate();
 
-  // Загрузка рекордов
-  const [records, setRecords] = useState(() => {
-    const saved = localStorage.getItem('birulki-records');
-    return saved ? JSON.parse(saved) : [];
-  });
-
-  // Сохранение рекордов
-  useEffect(() => {
-    localStorage.setItem('birulki-records', JSON.stringify(records));
-  }, [records]);
-
-  // Инициализация бирюлек
   const initSticks = () => {
     const newSticks = [];
     const boardWidth = gameBoardRef.current?.clientWidth || 500;
@@ -33,11 +20,11 @@ const Game = () => {
         y: Math.random() * (boardHeight - 100),
         rotation: Math.random() * 360,
         collected: false,
-        color: `hsl(${Math.random() * 60 + 10}, 70%, 50%)` // Оттенки коричневого
+        color: `hsl(${Math.random() * 60 + 10}, 70%, 50%)`
       });
     }
     
-    setSticks(newSticks);
+    setGameState(prev => ({ ...prev, sticks: newSticks }));
   };
 
   const startGame = () => {
@@ -45,45 +32,47 @@ const Game = () => {
       alert('Введите ваше имя!');
       return;
     }
-    setGameStarted(true);
-    setScore(0);
+    setGameState(prev => ({ ...prev, isGameStarted: true, score: 0 }));
     initSticks();
   };
 
   const endGame = () => {
     if (score > 0) {
-      setRecords(prev => {
-        const newRecord = {
-          name: playerName,
-          score: score,
-          date: new Date().toLocaleDateString()
-        };
-        return [...prev, newRecord]
-          .sort((a, b) => b.score - a.score)
-          .slice(0, 10);
-      });
+      const newRecord = {
+        name: playerName,
+        score: score,
+        date: new Date().toLocaleDateString()
+      };
+      
+      const records = JSON.parse(localStorage.getItem('birulki-records') || '[]');
+      const updatedRecords = [...records, newRecord]
+        .sort((a, b) => b.score - a.score)
+        .slice(0, 10);
+      
+      localStorage.setItem('birulki-records', JSON.stringify(updatedRecords));
     }
-    setGameStarted(false);
+    
+    setGameState(prev => ({ ...prev, isGameStarted: false }));
   };
 
   const collectStick = (id) => {
-    setSticks(prev => 
-      prev.map(stick => 
+    setGameState(prev => {
+      const updatedSticks = prev.sticks.map(stick => 
         stick.id === id ? { ...stick, collected: true } : stick
-      )
-    );
-    setScore(prev => prev + 1);
+      );
+      return { ...prev, sticks: updatedSticks, score: prev.score + 1 };
+    });
   };
 
   return (
     <div className="game-container">
-      {!gameStarted ? (
+      {!isGameStarted ? (
         <div className="game-start">
           <h2>Игра в бирюльки</h2>
           <input
             type="text"
             value={playerName}
-            onChange={(e) => setPlayerName(e.target.value)}
+            onChange={(e) => setGameState(prev => ({ ...prev, playerName: e.target.value }))}
             placeholder="Ваше имя"
           />
           <button onClick={startGame}>Начать игру</button>
@@ -120,7 +109,10 @@ const Game = () => {
               )
             ))}
           </div>
-          <button onClick={endGame}>Закончить игру</button>
+          <div className="game-controls">
+            <button onClick={endGame}>Закончить игру</button>
+            <button onClick={() => navigate('/records')}>Рекорды</button>
+          </div>
         </div>
       )}
     </div>
