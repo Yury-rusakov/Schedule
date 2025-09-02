@@ -1,0 +1,130 @@
+/* LanguageSwitcher.css */
+.language-switcher {
+  position: relative;
+  display: inline-block;
+}
+
+.language-selector {
+  display: flex;
+  align-items: center;
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  background: white;
+  cursor: pointer;
+  min-width: 120px;
+  justify-content: space-between;
+  transition: border-color 0.2s ease;
+}
+
+.language-selector:hover {
+  border-color: #007bff;
+}
+
+.current-language {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.dropdown-arrow {
+  margin-left: 8px;
+  font-size: 10px;
+}
+
+.language-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  margin-top: 4px;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  min-width: 250px;
+  z-index: 1000;
+}
+
+.search-container {
+  padding: 12px;
+  border-bottom: 1px solid #eee;
+}
+
+.language-search {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.language-search:focus {
+  outline: none;
+  border-color: #007bff;
+}
+
+.language-list {
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.language-item {
+  display: flex;
+  align-items: center;
+  padding: 12px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.language-item:hover {
+  background-color: #f8f9fa;
+}
+
+.language-item.selected {
+  background-color: #e3f2fd;
+}
+
+.language-flag {
+  margin-right: 12px;
+  font-size: 18px;
+}
+
+.language-name {
+  flex: 1;
+  font-weight: 500;
+}
+
+.language-code {
+  color: #666;
+  font-size: 12px;
+  margin-left: 8px;
+  text-transform: uppercase;
+}
+
+.no-results {
+  padding: 20px;
+  text-align: center;
+  color: #666;
+  font-style: italic;
+}
+
+/* Закрытие dropdown при клике вне его */
+.language-switcher::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 999;
+  display: none;
+}
+
+.language-switcher:focus-within::before {
+  display: block;
+}
+
+.language-switcher:focus-within .language-dropdown {
+  display: block;
+}

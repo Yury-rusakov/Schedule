@@ -1,0 +1,8 @@
+{
+  "menu.home": "Home",
+  "menu.about": "About",
+  "menu.contact": "Contact",
+  "language.select": "Select Language:",
+  "language.searchPlaceholder": "Search languages...",
+  "language.noResults": "No languages found"
+}
